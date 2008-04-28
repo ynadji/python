@@ -13,7 +13,12 @@
 # Create a socket to be used over the network
 from socket import * 
 import thread
+import httplib
+import re
 
+
+
+# This method makes the server multi-threaded.
 def handler(clientsock, addr):
 	while 1:
 		data = clientsock.recv(BUFSIZ)
@@ -22,22 +27,74 @@ def handler(clientsock, addr):
 
 	clientsock.close()
 
+def getIP():
+	conn = httplib.HTTPConnection("www.showmyip.com")
+	conn.request("GET","/")
+	r1 = conn.getresponse()
+	print r1.status, r1.reason # Debug
+	data1 = r1.read()
+	#print data1 # Debug
+	p = re.compile("[\d\+\.]{7,15}")
+	results = p.findall(data1)
+	ip = results[0]
+	print ip # Debug
+	return ip
+	
 
-if __name__=='__main__':
-	#HOST = 'localhost'
-	HOST = '216.47.133.103'
-	PORT = 21567
-	BUFSIZ = 1024
-	ADDR = (HOST, PORT)
-	serversock = socket(AF_INET, SOCK_STREAM)
-	serversock.bind(ADDR)
-	serversock.listen(2)
+# The host class
+class Host:
 
-	while 1:
-		print 'waiting for connection...'
-		clientsock, addr = serversock.accept()
-		print '...connected from:', addr
-		#Thread.__init__(self, handler, (clientsock,addr))
-		thread.start_new_thread(handler, (clientsock,addr))
+	def __init__(self):
 
-	serversock.close()
+		# Run a method to get the IP address here.
+		# Set the IP found to the host.
+
+		HOST = getIP()
+		PORT = 21567
+		BUFSIZ = 1024
+		ADDR = (HOST, PORT)
+		serversock = socket(AF_INET, SOCK_STREAM)
+		serversock.bind(ADDR)
+		serversock.listen(2)
+
+		# Loop and away incoming connections.  As they are
+		# received spawn a thread to service them.
+		while 1:
+			print 'waiting for connection on ',HOST,'...'
+			clientsock, addr = serversock.accept()
+			print '...connected from:', addr
+			thread.start_new_thread(handler, (clientsock,addr))
+
+		serversock.close()
+
+
+
+
+class Client:
+
+	def __init__(self):
+
+		# Run a method to get the IP address here.
+		# Set the IP found to the host.
+
+		HOST = getIP()
+		PORT = 21567
+		BUFSIZ = 1024
+		ADDR = (HOST, PORT)
+
+		tcpCliSock = socket(AF_INET, SOCK_STREAM)
+		tcpCliSock.connect(ADDR)
+
+		# Loop through and away user input to send accross the wire.
+		# Should be able to remove this and only send data accross
+		# the wire as needed (on demand).  Hopefully the client doesnt
+		# need to bind a socket in order to receive data on demand.
+		while 1:
+			data = raw_input('> ')
+			if not data: break 
+			tcpCliSock.send(data)
+			data = tcpCliSock.recv(1024)
+			if not data: break 
+			print data
+
+		tcpCliSock.close()
