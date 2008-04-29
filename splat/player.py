@@ -37,3 +37,9 @@ class Player:
 		"""Increments score for current round"""
 		if score >= 0:
 			self.score += score
+
+	def updateBoard(self, updates):
+		"""updates should be a list of a (color,x,y) tuples"""
+		for boardCapture in updates:
+			#board.capture(boardCapture)
+			print "Captured: ", boardCapture

@@ -29,7 +29,8 @@ class Host(Player):
 				self.availableColors)
 
 	def __init__(self, name, color, config):
-		"""Lol inheritance"""
+		"""Inherits from Client. 'Host' is considered a client
+		and simply send the messages to itself."""
 		Player.__init__(self, name, color, 'localhost')
 		self.availableColors = COLORS
 		self.removeColor(color)
@@ -52,6 +53,11 @@ class Host(Player):
 		self.dotTimer = Timer(DOT_INTERVAL, self.placeNewDots)
 		self.dotTimer.start()
 
+	def recvMessage(self, message):
+		"""Host receives message from client (request to join,
+		request to capture dot, etc.). Determines the form of
+		the message, and delegates it accordingly."""
+
 	def placeNewDots(self):
 		"""Every DOT_INTERVAL, new dots are placed. If the board is full,
 		stop recreating the timer thread."""
@@ -61,6 +67,10 @@ class Host(Player):
 		if dotsAdded != 0:
 			self.dotTimer = Timer(DOT_INTERVAL, self.placeNewDots)
 			self.dotTimer.start()
+		"""
+		# form request and send it out
+		"""
+		self.updateClientBoards(request)
 		"""
 		self.uselessCountVariable -= 1
 		sys.stderr.write("placeNewDots() has been run\n")
@@ -74,7 +84,13 @@ class Host(Player):
 			self.dotTimer = Timer(DOT_INTERVAL, self.placeNewDots)
 			self.dotTimer.start()
 
-	#def updateBoard(self, request):
+	def updateClientBoards(self, request):
+		"""This should be used when something is captured,
+		and when new dots are added"""
+		# create list of a (color,x,y) tuples for capture
+		captures = request
+		for client in clients:
+			client.updateBoard(captures)
 
 	def addClient(self, player):
 		if len(self.clients) == self.config['maxPlayers']:
@@ -99,7 +115,7 @@ class Host(Player):
 	def numClients(self):
 		return len(self.clients)
 
-	# refactor this, or something
+	# refactor this, or something, it's hideous
 	def nameFree(self, name):
 		free = True
 		for player in self.clients:
