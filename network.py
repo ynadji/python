@@ -7,6 +7,11 @@
 #----------------------#
 
 
+#----------------------#
+#       ERRORS	       #
+# -1 : No Internet Con #
+#----------------------#
+
 # USE TCP/IP or UDP...
 
 
@@ -16,6 +21,8 @@ import thread
 import httplib
 import re
 
+ONLINE = "1"
+OFFLINE = "0"
 
 
 # This method makes the server multi-threaded.
@@ -27,18 +34,22 @@ def handler(clientsock, addr):
 
 	clientsock.close()
 
-def getIP():
-	conn = httplib.HTTPConnection("www.showmyip.com")
-	conn.request("GET","/")
-	r1 = conn.getresponse()
-	print r1.status, r1.reason # Debug
-	data1 = r1.read()
-	#print data1 # Debug
-	p = re.compile("[\d\+\.]{7,15}")
-	results = p.findall(data1)
-	ip = results[0]
-	print ip # Debug
-	return ip
+def getIP(online):
+	# This is statement is only used for 
+	if online == "0":
+		return "-1"
+	try:
+		conn = httplib.HTTPConnection("www.showmyip.com")
+		conn.request("GET","/")
+		r1 = conn.getresponse()
+		data1 = r1.read()
+		p = re.compile("[\d\+\.]{7,15}")
+		results = p.findall(data1)
+		ip = results[0]
+		return ip
+	except:
+		return "-1"
+		raise
 	
 
 # The host class
@@ -46,10 +57,14 @@ class Host:
 
 	def __init__(self):
 
+		print "Welcome"
+
+	def startServer(self):
+
 		# Run a method to get the IP address here.
 		# Set the IP found to the host.
 
-		HOST = getIP()
+		HOST = getIP(ONLINE)
 		PORT = 21567
 		BUFSIZ = 1024
 		ADDR = (HOST, PORT)
@@ -77,7 +92,7 @@ class Client:
 		# Run a method to get the IP address here.
 		# Set the IP found to the host.
 
-		HOST = getIP()
+		HOST = getIP(ONLINE)
 		PORT = 21567
 		BUFSIZ = 1024
 		ADDR = (HOST, PORT)
@@ -98,3 +113,8 @@ class Client:
 			print data
 
 		tcpCliSock.close()
+
+class Network:
+
+	def simDeadConn():
+		getIP(OFFLINE)
