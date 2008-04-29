@@ -135,7 +135,7 @@ class TestAddPlayer(unittest.TestCase):
 		# or the board determines there are no dots left to
 		# be placed
 		waittime = host.DOT_INTERVAL
-		#self.hst.beginDotTimer()
+		self.hst.beginDotTimer()
 
 		# this is a pretty poor way to test it
 		# but 'placeNewDots() has been run' should 
