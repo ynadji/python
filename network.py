@@ -23,6 +23,9 @@ import re
 
 ONLINE = "1"
 OFFLINE = "0"
+ALIVE = "1"
+YES = "1"
+NO = "0"
 
 
 # This method makes the server multi-threaded.
@@ -72,9 +75,11 @@ class Host:
 		serversock.bind(ADDR)
 		serversock.listen(2)
 
+		ALIVE = YES
+
 		# Loop and away incoming connections.  As they are
 		# received spawn a thread to service them.
-		while 1:
+		while ALIVE:
 			print 'waiting for connection on ',HOST,'...'
 			clientsock, addr = serversock.accept()
 			print '...connected from:', addr
@@ -82,7 +87,11 @@ class Host:
 
 		serversock.close()
 
+	def killServer(self):
+		ALIVE = NO
 
+	def OMG(self):
+		print "OMG"
 
 
 class Client:
