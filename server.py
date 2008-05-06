@@ -4,6 +4,7 @@
 
 import asyncore
 import socket, time
+import httplib
 
 # reference time
 TIME1970 = 2208988800L
@@ -16,24 +17,23 @@ class Channel(asyncore.dispatcher):
 		self.send(t)
 		self.close()
 
-class Helper():
-	def getIP(online):
-		# This is statement is only used for 
-		if online == "0":
-			return "-1"
-		try:
-			conn = httplib.HTTPConnection("www.showmyip.com")
-			conn.request("GET","/")
-			r1 = conn.getresponse()
-			data1 = r1.read()
-			p = re.compile("[\d\+\.]{7,15}")
-			results = p.findall(data1)
-			ip = results[0]
-			return ip
-		except:
-			return "-1"
-			raise
-		
+def getIP(online):
+	# This is statement is only used for 
+	if online == "0":
+		return "-1"
+	try:
+		conn = httplib.HTTPConnection("www.showmyip.com")
+		conn.request("GET","/")
+		r1 = conn.getresponse()
+		data1 = r1.read()
+		p = re.compile("[\d\+\.]{7,15}")
+		results = p.findall(data1)
+		ip = results[0]
+		return ip
+	except:
+		return "-1"
+		raise
+	
 
 
 class Server(asyncore.dispatcher):
@@ -43,10 +43,14 @@ class Server(asyncore.dispatcher):
 		self.port = port
 		self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
 
-		IP = Helper() # Determine the hosts IP address
-		IP.getIP()
+		IP = getIP("1") # Determine the hosts IP address
 
-		self.bind((IP, port))
+		ADDR = (IP, port)
+
+		print "ADDR: ",ADDR
+
+		self.bind(ADDR)
+		#self.bind((IP, port))
 		self.listen(5)
 		print "listening on port", self.port
 
