@@ -1,3 +1,5 @@
+#!/usr/bin/env python 
+
 # File: asyncore-example-2.py
 
 import asyncore
@@ -6,7 +8,7 @@ import socket, time
 # reference time
 TIME1970 = 2208988800L
 
-class TimeChannel(asyncore.dispatcher):
+class Channel(asyncore.dispatcher):
 
     def handle_write(self):
         t = int(time.time()) + TIME1970
@@ -14,7 +16,7 @@ class TimeChannel(asyncore.dispatcher):
         self.send(t)
         self.close()
 
-class TimeServer(asyncore.dispatcher):
+class Server(asyncore.dispatcher):
 
     def __init__(self, port=37):
         asyncore.dispatcher.__init__(self)
@@ -26,8 +28,8 @@ class TimeServer(asyncore.dispatcher):
 
     def handle_accept(self):
         channel, addr = self.accept()
-        TimeChannel(channel)
+        Channel(channel)
 
-server = TimeServer(8037)
+server = Server(8037)
 asyncore.loop()
 
