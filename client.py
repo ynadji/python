@@ -31,7 +31,7 @@ class Client(asyncore.dispatcher):
 
 	def handle_write(self):
 		self.buffer = "New Dots? - Client"
-		print "Client: Checking for new dots"
+		#print "Client: Checking for new dots"
 		sent = self.send (self.buffer)
 		self.buffer = self.buffer[sent:]
 
@@ -71,4 +71,4 @@ class Client(asyncore.dispatcher):
 # try it out
 #def Run():
 request = Client("localhost")
-asyncore.loop()
+asyncore.loop(count = 2)

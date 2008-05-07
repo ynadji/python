@@ -33,8 +33,8 @@ class Channel(asyncore.dispatcher):
 		self.send(cords)
 		#self.send(c.getCords())
 		time.sleep(.1)
-		c.setCords()
-		#self.close()
+		#c.setCords()
+		self.close()
 
 	def handle_read(self):
 		print "Server Reading"
@@ -96,6 +96,6 @@ class Server(asyncore.dispatcher):
 
 #def Run():
 server = Server(8038)
-asyncore.loop()
+asyncore.loop(count=40)
 
 #thread.start_new_thread(Run(),'')
