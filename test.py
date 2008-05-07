@@ -24,6 +24,10 @@ class Host(unittest.TestCase):
 	def setUp(self):
 		h = network.Host()
 		h.startServer()
+		print "Hello World"
+		print "Hello World"
+		print "Hello World"
+		print "Hello World"
 
 	def tearDown(self):
 		h.killServer()

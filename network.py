@@ -93,7 +93,6 @@ class Host:
 	def OMG(self):
 		print "OMG"
 
-
 class Client:
 
 	def __init__(self):
@@ -127,3 +126,4 @@ class Network:
 
 	def simDeadConn():
 		getIP(OFFLINE)
+
