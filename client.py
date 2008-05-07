@@ -69,6 +69,6 @@ class Client(asyncore.dispatcher):
 
 
 # try it out
-
-request = Client("localhost")
-asyncore.loop()
+def Run():
+	request = Client("localhost")
+	asyncore.loop()

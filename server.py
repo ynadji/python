@@ -102,4 +102,4 @@ def Run():
 	server = Server(8038)
 	asyncore.loop()
 
-thread.start_new_thread(Run())
+#thread.start_new_thread(Run(),'')
