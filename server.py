@@ -12,13 +12,13 @@ import random
 
 class Cords():
 
-	cords = "-1"
+	cords = "', 4"
 
 	def setCords(self):
-		self.cords = "5"
+		self.cords = "",random.randint(1, 10)
+		#self.cords = "5"
 
 	def getCords(self):
-		self.cords = "",random.randint(1, 10)
 		return str(self.cords)
 
 c = Cords()
@@ -32,8 +32,12 @@ class Channel(asyncore.dispatcher):
 		cords = c.getCords()
 		self.send(cords)
 		#self.send(c.getCords())
-		time.sleep(2)
-		c.setCords()
+		time.sleep(.1)
+		i += 1
+		print i
+		if i == 30:
+			c.setCords()
+			i = 0
 		#self.close()
 
 	def handle_read(self):

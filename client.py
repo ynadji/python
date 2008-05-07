@@ -20,43 +20,23 @@ import socket
 
 class Client(asyncore.dispatcher):
 
-	read = 0
-	write = 0
-
-	def getRead(self):
-		return self.read
-
-	def getWrite(self):
-		return self.write
-
-	def setRead(i):
-		read = i
-
-	def setWrite(i):
-		write = i
-
 	def __init__(self, host, port=8038):
 		self.buffer = "Hello Server"
 		asyncore.dispatcher.__init__(self)
 		self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.connect((host, port))
 
-	#def writable(self):
-		#return 0 # don't have anything to write
-		#return self.getWrite() # don't have anything to write
-
 	def writable (self):
 		return (len(self.buffer) > 0)
 
 	def handle_write(self):
-		self.buffer = "Hello Server - Love Client"
-		print "Client: Writing:",self.buffer
+		self.buffer = "New Dots? - Client"
+		print "Client: Checking for new dots"
 		sent = self.send (self.buffer)
 		self.buffer = self.buffer[sent:]
 
 	def handle_connect(self):
 		print "Client: Connected"
-		self.buffer = "Hello Server"
 		pass # connection succeeded
 
 	def handle_expt(self):
@@ -81,7 +61,7 @@ class Client(asyncore.dispatcher):
 		# get from server
 		s = self.recv(4)
 		print "Received: ",s
-		time.sleep(1)
+		time.sleep(.1)
 		self.handle_write()
 
 		
