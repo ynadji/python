@@ -4,6 +4,7 @@ sys.path.append(".")
 
 import host
 from player import Player
+from time import sleep
 
 class TestGetterSetter(unittest.TestCase):
 
@@ -136,6 +137,7 @@ class TestAddPlayer(unittest.TestCase):
 		# be placed
 		waittime = host.DOT_INTERVAL
 		self.hst.beginDotTimer()
+		sleep(25)
 
 		# this is a pretty poor way to test it
 		# but 'placeNewDots() has been run' should 
