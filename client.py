@@ -52,6 +52,7 @@ class Client(asyncore.dispatcher):
 
 # try it out
 
-request = Client("localhost")
+#request = Client("localhost")
+request = Client("216.47.152.199")
 
 asyncore.loop()

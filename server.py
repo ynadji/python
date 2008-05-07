@@ -34,5 +34,5 @@ class Server(asyncore.dispatcher):
 		channel, addr = self.accept()
 		Channel(channel)
 
-server = Server(8038)
-asyncore.loop()
+#server = Server(8038)
+#asyncore.loop()

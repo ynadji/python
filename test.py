@@ -1,17 +1,16 @@
 #!/usr/bin/python
 
 import unittest
-
-import network
+import server,client
 
 ONLINE = "1"
 OFFLINE = "0"
 
 class General(unittest.TestCase):
 
-	def testGetIPOnline(self):
-		"""Get IP Online"""
-		assert network.getIP(ONLINE) != "-1"
+	#def testGetIPOnline(self):
+		#"""Get IP Online"""
+		#assert network.getIP(ONLINE) != "-1"
 
 
 	def testGetIPOffline(self):
@@ -19,17 +18,10 @@ class General(unittest.TestCase):
 		assert network.getIP(OFFLINE) == "-1"
 
 
-class Host(unittest.TestCase):
+#class Server(unittest.TestCase):
 
-	def setUp(self):
-		h = network.Host()
-		h.startServer()
-
-	def tearDown(self):
-		h.killServer()
-
-	def testOMG(self):
-		h.killServer()
+	#def testStart(self):
+		#server()
 
 
 if __name__ == "__main__":
