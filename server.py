@@ -8,6 +8,8 @@ from shared import *
 import time
 import thread
 import random
+from operator import *
+from array import *
 
 
 msg = ''
@@ -24,19 +26,87 @@ class Cords():
 
 c = Cords()
 
+class PlayersStruct():
+
+	def __init__(self):
+		self.bigboy = {}
+
+	def newColor(self,color):
+		self.bigboy[color] = []
+		print "New color array created"
+
+	def addMsg(self,color,msg):
+		print "New msg added for",color
+		self.bigboy[color].append(msg) # insert new msg at the end of the array
+		print self.bigboy
+
+	def countMsg(self,color):
+		return len(self.bigboy[color])
+
+	def getMsg(self,color):
+		return self.bigboy[color].pop(0)
+	
+ps = PlayersStruct()
+
+buffer = ''
+id = ''
+
 class Channel(asyncore.dispatcher):
 
+	global buffer
+
+#	def writable (self):
+#		print "Writable?"
+#		return (len(cords) > 0)
+#
+#	def readable(self):
+#		print "Readable?"
+#		return 1
+
 	def checkMsg(self, msg):
+		global id
+		#try:
+		global ps
+		id = msg[0:indexOf(msg,"$")]
+		color =  msg[len(id)+1:indexOf(msg,":")]
 		try:
-			if msg[0] == "U":
-				print "Update Found"
-				print "Sending Cords"
-				c.setCords("Updated Cords")
-			if msg[0] == "N":
-				print "New Found"
-				c.setCords("New Cords")
+			x_cord = msg[indexOf(msg,"!")+1:indexOf(msg,"@")]
+			y_cord = msg[indexOf(msg,"@")+1:]
+			print "X:",x_cord
+			print "Y:",y_cord
 		except Exception:
-			pass	
+			pass
+		msg = msg[indexOf(msg,":")+1]
+		print "ID:",id
+		print "Color:",color
+		print "Msg:",msg
+
+		if msg[0] == "P":
+			print "New player"
+			ps.newColor(color)
+			c.setCords("You have been added")
+
+		if msg[0] == "U":
+			print "Update Found"
+			c.setCords("Updated Cords")
+			print "Msg count:",ps.countMsg(color)
+			if ps.countMsg(color) > 0:
+				this_msg = ps.getMsg(color)
+				print "Returning this msg:",this_msg
+				c.setCords(this_msg)
+			else:
+				c.setCords("Nothing New")
+				print "No Messages awaiting"
+
+		if msg[0] == "N":
+			print "New Found"
+			c.setCords("%d:%d" % x_cord % y_cord)
+			cords = c.getCords()
+			ps.addMsg(color,cords)
+			print "Awaiting msgs:",ps.countMsg(color)
+
+		#except Exception:
+			#pass	
 
 	def handle_read(self):
 		global msg
@@ -45,12 +115,19 @@ class Channel(asyncore.dispatcher):
 
 	def handle_write(self):
 		try:
+			global id
 			cords = c.getCords()
 			cords = cords + "^" # append terminating character
+			cords = id + "$" + cords # prepend the ID
+			print "ID:",id
+			print "Sending msg:",cords
 			self.send(cords)
+			self.close()
 		except Exception:
 			pass
 
+		self.close()
+		print "---------------------------"
 
 class Server(asyncore.dispatcher):
 
@@ -75,17 +152,14 @@ class Server(asyncore.dispatcher):
 		Channel(channel)
 
 	def handle_write(self):
+		print "Write_lower"
 		sent = self.send (self.buffer)
 		self.buffer = self.buffer[sent:]
 
-	def writable (self):
-		return (len(self.buffer) > 0)
-
 	def handle_read(self):
+		print "Read_lower"
+		return (len(self.buffer) > 0)
 		data = self.recv (8192)
-
-	def readable(self):
-		return 1
 
 
 server = Server(8038)
