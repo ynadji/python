@@ -14,6 +14,7 @@
 import sys
 from threading import Timer
 from player import Player
+from client import *
 
 COLORS = ["blue", "red", "green", "orange", "purple", "yellow"]
 
@@ -36,6 +37,7 @@ class Host(Player):
 		self.removeColor(color)
 		self.clients = [self]
 		self.board
+		Run("%s:P" % self.color)
 
 		# setup config
 		if config == None:
@@ -84,6 +86,7 @@ class Host(Player):
 			self.dotTimer = Timer(DOT_INTERVAL, self.placeNewDots)
 			self.dotTimer.start()
 
+	# useless, atm
 	def updateClientBoards(self, request):
 		"""This should be used when something is captured,
 		and when new dots are added"""
@@ -111,6 +114,8 @@ class Host(Player):
 
 		self.clients.append(player)
 		self.removeColor(player.color)
+		# add client to server
+		Run("%s:p" % player.color)
 
 	def numClients(self):
 		return len(self.clients)
