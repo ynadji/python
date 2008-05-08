@@ -56,7 +56,7 @@ class PlayersStruct():
 
 	def addCapture(self,cords):
 		for key in self.bigboy.keys():
-			self.bigboy[color].insert(0,cords)
+			self.bigboy[key].insert(0,cords)
 
 
 	
