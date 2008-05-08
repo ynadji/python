@@ -20,7 +20,7 @@ COLORS = ["blue", "red", "green", "orange", "purple", "yellow"]
 
 # interval used to place dots
 # in seconds
-DOT_INTERVAL = 5.0
+DOT_INTERVAL = 2.0
 
 class Host(Player):
 
@@ -76,7 +76,8 @@ class Host(Player):
 		#	# add dot, track it to send to clients
 		#	print "Do i get here?"
 		#	dots_added.append(self.board.add_dot)
-		for i in xrange(self.config['maxPlayers'] + 1):
+		#for i in xrange(self.config['maxPlayers'] + 1):
+		for i in xrange(1):
 			self.board.add_dot()
 
 
@@ -124,7 +125,7 @@ class Host(Player):
 		self.clients.append(player)
 		self.removeColor(player.color)
 		# add client to server
-		Run("%s:p" % player.color)
+		#Run("%s:p" % player.color)
 		# generate clientBoard
 		#player.setBoard(self.board)
 

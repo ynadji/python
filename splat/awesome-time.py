@@ -28,8 +28,10 @@ p1.setBoard(initial_board)
 p2.setBoard(initial_board)
 
 h.addClient(p1)
+p1.addClient()
 time.sleep(2)
 h.addClient(p2)
+p2.addClient()
 time.sleep(2)
 
 print h.board

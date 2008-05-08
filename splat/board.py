@@ -44,14 +44,14 @@ class Board:
           global grid
 
           if not self.at_max_dots():
-               x = random.randrange(0, self.x_size)
-               y = random.randrange(0, self.y_size)
+               x = random.randrange(0, self.x_size + 1)
+               y = random.randrange(0, self.y_size + 1)
                
                loc = [x,y]
  
                while self.is_dot_at(loc):
-                    x = random.randrange(0, self.x_size)
-                    y = random.randrange(0, self.y_size)
+                    x = random.randrange(0, self.x_size + 1)
+                    y = random.randrange(0, self.y_size + 1)
                     loc = [x,y]
                    
  
@@ -83,6 +83,8 @@ class Board:
      #Determines if there is a dot at location.
      def is_dot_at(self, location):
           global grid
+          location[0] += 1
+          location[1] += 1
 
           for each in self.grid:
                if (each[1] == location[0]) and (each[2] == location[1]):

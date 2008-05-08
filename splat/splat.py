@@ -5,8 +5,14 @@ try:
     import math
     import os
     import pygame
+    import time
+    import thread
 
     from pygame.locals import *
+    from client import *
+    from player import *
+    from host import *
+    import high_score
    
 except ImportError, err:
     print "Couldn't laod modulez. %s" % (err)
@@ -81,6 +87,7 @@ def load_image(name, colorkey=None):
         image.set_colorkey(colorkey)
     return image
 
+# GLOBALS
 #used to control menus and shit
 STATE = 0 #0=main_menu, 1=host_options, 2=player_options, 3=invites
 BOARD_SIZE = 0
@@ -96,14 +103,18 @@ GREEN_DOT=None
 PURPLE_DOT=None
 ORANGE_DOT=None
 
+PLAYER=None
 
 
 #event handler for actual gameplay
 def handle_ev(pos):
     x,y = pos
-    x_pos = x % DOT_SIZE
-    y_pos = y % DOT_SIZE
-    loc = (x_pos, y_pos)
+    x_pos = math.floor(x / DOT_SIZE)
+    y_pos = math.floor(y / DOT_SIZE)
+    loc = [x_pos, y_pos]
+    print loc
+    print PLAYER.board.is_dot_at(loc)
+    PLAYER.dotClicked(loc)
 
 def draw_board(grid):
     bg = pygame.display.get_surface()
@@ -127,15 +138,15 @@ def draw_board(grid):
 
     #vertical lines
     for i in range(BOARD_SIZE + 1):
-        start_pos = ((i * DOT_SIZE) + (i * line_width), 0)
-        end_pos = ((i * DOT_SIZE) + (i * line_width), DIMENSION)
-        pygame.draw.line(bg, black, start_pos, end_pos, line_width)
+        start_pos = ((i * DOT_SIZE) + (i * LINE_WIDTH), 0)
+        end_pos = ((i * DOT_SIZE) + (i * LINE_WIDTH), DIMENSION)
+        pygame.draw.line(bg, (0,0,0), start_pos, end_pos, LINE_WIDTH)
 
     #horizontal lines
     for i in range(BOARD_SIZE + 1):
-        start_pos = (0, (i * DOT_SIZE) + (i * line_width))
-        end_pos = (DIMENSION, (i * DOT_SIZE) + (i * line_width))
-        pygame.draw.line(bg, black, start_pos, end_pos, line_width)
+        start_pos = (0, (i * DOT_SIZE) + (i * LINE_WIDTH))
+        end_pos = (DIMENSION, (i * DOT_SIZE) + (i * LINE_WIDTH))
+        pygame.draw.line(bg, (0,0,0), start_pos, end_pos, LINE_WIDTH)
 
     # blit everything to the screen
     pygame.display.flip()
@@ -171,6 +182,8 @@ def main():
     global GREEN_DOT
     global PURPLE_DOT
     global ORANGE_DOT
+    global PLAYER
+    global LINE_WIDTH
 
 
     # RGB color tuples
@@ -373,6 +386,7 @@ def main():
                         sys.exit()
                     if event.key == K_RETURN:
                         player_name = prompt(10,217,"Please enter your name:", font,screen)                        #fix^
+			PLAYER = Host(player_name, player_color, None)
                         #fix^
                         state = 3
                         background.fill(green)
@@ -439,6 +453,8 @@ def main():
                         sys.exit()
                     if event.key == K_RETURN:
                         player_name = prompt(10,140,"Please enter your name:", font,screen)
+			# might have to change this VVV (ipaddr)
+			PLAYER = Player(player_name, player_color, '0.0.0.0')
                         #fix ^
                  # uncomment once networking is integrated
                  # can advance once know BOARD_SIZE
@@ -498,12 +514,31 @@ def main():
                             pygame.display.flip()
 
 
+## GENBOARD
+    def genBoard(config):
+        """Makes board lawl"""
+        dotsleft = (config['boardSize'][0] * config['boardSize'][1]) - config['maxDots']
+        board = Board(config['maxPlayers'],
+                    config['boardSize'][0],
+                    config['boardSize'][1],
+                    config['rounds'],
+                    dotsleft)
+
+        return board
 
 
                         
 
 ### END OF MENU SHIT #####################################
 
+    print "awesome1"
+    if isinstance(PLAYER, Host):
+        print "awesome2"
+        PLAYER.beginDotTimer()
+        print "awesome3"
+        PLAYER.setBoard(genBoard(PLAYER.config))
+
+    print "awesome4"
    
 # board draw
 
@@ -523,7 +558,7 @@ def main():
     if BOARD_SIZE == 10:
         DOT_SIZE = 60
         bar = '.png'
-    line_width = 1
+    LINE_WIDTH = 1
 
  
     BLACK_DOT=load_image('dot_black' + bar, white)
@@ -534,20 +569,20 @@ def main():
     PURPLE_DOT=load_image('dot_purple' + bar, white)
     ORANGE_DOT=load_image('dot_orange' + bar, white)
 
-    DIMENSION = (BOARD_SIZE * DOT_SIZE) + (line_width * (BOARD_SIZE + 1))
+    DIMENSION = (BOARD_SIZE * DOT_SIZE) + (LINE_WIDTH * (BOARD_SIZE + 1))
 
 
     #vertical lines
     for i in range(BOARD_SIZE + 1):
-        start_pos = ((i * DOT_SIZE) + (i * line_width), 0)
-        end_pos = ((i * DOT_SIZE) + (i * line_width), DIMENSION)
-        pygame.draw.line(background, black, start_pos, end_pos, line_width)
+        start_pos = ((i * DOT_SIZE) + (i * LINE_WIDTH), 0)
+        end_pos = ((i * DOT_SIZE) + (i * LINE_WIDTH), DIMENSION)
+        pygame.draw.line(background, black, start_pos, end_pos, LINE_WIDTH)
 
     #horizontal lines
     for i in range(BOARD_SIZE + 1):
-        start_pos = (0, (i * DOT_SIZE) + (i * line_width))
-        end_pos = (DIMENSION, (i * DOT_SIZE) + (i * line_width))
-        pygame.draw.line(background, black, start_pos, end_pos, line_width)
+        start_pos = (0, (i * DOT_SIZE) + (i * LINE_WIDTH))
+        end_pos = (DIMENSION, (i * DOT_SIZE) + (i * LINE_WIDTH))
+        pygame.draw.line(background, black, start_pos, end_pos, LINE_WIDTH)
 
     # blit everything to the screen
     screen.blit(background, (0, 0))
@@ -558,6 +593,10 @@ def main():
     # Game event loop #
     ###################
     while 1:
+        time.sleep(0.5)
+        PLAYER.updateBoard()
+        draw_board(PLAYER.board.grid)
+
         for event in pygame.event.get():
             if event.type == QUIT:
                 raise SystemExit
@@ -569,7 +608,9 @@ def main():
                 if event.key == K_ESCAPE:
                     pygame.display.quit()
                     sys.exit()
+	
 
 
 
-if __name__ == '__main__': main()
+if __name__ == '__main__': 
+    main()

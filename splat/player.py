@@ -35,6 +35,8 @@ class Player:
 	def setBoard(self, board):
 		self.board = board
 
+	def addClient(self):
+		Run("%s:p" % self.color)
 
 	def recvFromHost(self):
 		"""This method receives information from the host

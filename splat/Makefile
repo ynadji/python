@@ -5,3 +5,7 @@ test:
 clean:
 	rm -f *.pyc
 	rm -f tests/*.pyc
+
+run:
+	python high_score.py &
+	python splat.py

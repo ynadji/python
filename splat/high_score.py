@@ -119,3 +119,6 @@ def clearhighscores():
 		conn.commit()
 		c.close()
 		conn.close()
+
+if __name__ == '__main__':
+	startserver()
