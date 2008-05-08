@@ -84,8 +84,8 @@ class Channel(asyncore.dispatcher):
 		try:
 			x_cord = msg[indexOf(msg,"!")+1:indexOf(msg,"@")]
 			y_cord = msg[indexOf(msg,"@")+1:]
-			#print "X:",x_cord
-			#print "Y:",y_cord
+			print "X:",x_cord
+			print "Y:",y_cord
 		except Exception:
 			pass
 		msg = msg[indexOf(msg,":")+1]
@@ -104,7 +104,7 @@ class Channel(asyncore.dispatcher):
 		if msg[0] == "P":
 			print "New Host"
 			ps.newColor(color)
-			c.setCords("Got Host?")
+			c.setCords("Got Host? We do.")
 			host_color = color
 
 		# Player is requesting any updates in their queuei
@@ -125,7 +125,7 @@ class Channel(asyncore.dispatcher):
 		# Host player has told us that a new dot exists so we'll add it to the queue for all players
 		if msg[0] == "N":
 			print "New Dot Cords Received"
-			c.setCords(x_cord+","+y_cord+":None")
+			c.setCords("[("+x_cord+","+y_cord+"),None]")
 			cords = c.getCords()
 			ps.addMsgAll(cords)
 			#print "Awaiting msgs:",ps.countMsg(color)
