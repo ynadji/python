@@ -82,6 +82,8 @@ class Client(asyncore.dispatcher):
 # try it out
 request = Client("localhost","green:P") # Add a new player
 asyncore.loop(count = 30)
+request = Client("localhost","blue:P") # Add a new player
+asyncore.loop(count = 30)
 request = Client("localhost","green:N!1@1") # host is sending us cords for new dots
 asyncore.loop(count = 30)
 request = Client("localhost","green:N!2@2") # host is sending us cords for new dots

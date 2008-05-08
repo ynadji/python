@@ -40,11 +40,18 @@ class PlayersStruct():
 		self.bigboy[color].append(msg) # insert new msg at the end of the array
 		print self.bigboy
 
+	def addMsgAll(self,cords):
+		print "Adding cords for everyone"
+		for key in self.bigboy.keys():
+			self.addMsg(key,cords)
+		print self.bigboy
+
 	def countMsg(self,color):
 		return len(self.bigboy[color])
 
 	def getMsg(self,color):
 		return self.bigboy[color].pop(0)
+
 	
 ps = PlayersStruct()
 
@@ -99,10 +106,10 @@ class Channel(asyncore.dispatcher):
 				print "No Messages awaiting"
 
 		if msg[0] == "N":
-			print "New Found"
+			print "New Dot Cords Received"
 			c.setCords(x_cord+","+y_cord)
 			cords = c.getCords()
-			ps.addMsg(color,cords)
+			ps.addMsgAll(cords)
 			print "Awaiting msgs:",ps.countMsg(color)
 
 		#except Exception:
