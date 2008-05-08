@@ -126,7 +126,11 @@ class Channel(asyncore.dispatcher):
 		# Host player has told us that a new dot exists so we'll add it to the queue for all players
 		if msg[0] == "N":
 			print "New Dot Cords Received"
-			c.setCords("[("+x_cord+","+y_cord+"),'"+color+"','New']")
+			if color == "None":
+				c.setCords("[("+x_cord+","+y_cord+"),"+color+",'New']")
+			else:
+				c.setCords("[("+x_cord+","+y_cord+"),'"+color+"','New']")
+
 			cords = c.getCords()
 			ps.addMsgAll(cords)
 			#print "Awaiting msgs:",ps.countMsg(color)
