@@ -11,14 +11,14 @@ import random
 
 
 msg = ''
+buffer = ''
 
 class Cords():
 
 	cords = "', 4"
 
-	def setCords(self):
-		self.cords = "",random.randint(1, 10)
-		#self.cords = "5"
+	def setCords(self, cords):
+		self.cords = cords		
 
 	def getCords(self):
 		return str(self.cords)
@@ -27,28 +27,62 @@ c = Cords()
 
 class Channel(asyncore.dispatcher):
 
+	buffer = ''
+
 	def checkMsg(self, msg):
-		if msg[0] == "U":
-			print "Update Found"
+		try:
+			if msg[0] == "U":
+				print "Update Found"
+				print "Sending Cords"
+				c.setCords("Updated Cords")
+			if msg[0] == "N":
+				print "New Found"
+				c.setCords("New Cords")
+		except Exception:
+			pass	
+		#self.close()
 
 	def handle_read(self):
 		global msg
 		msg = self.recv (8192)
 		print "Server Reading:", msg
-		print msg
 		self.checkMsg(msg)
 
+
+#	# New write func trying to use buffer
+#	def handle_write(self):
+#		#global buffer
+#		print "Server Writing"
+#		buffer = c.getCords()
+#		sent = send (buffer)
+#		buffer = buffer[sent:]
+#		self.close()
+#
+#	def writable (self):
+#		#global buffer
+#		print "writing"
+#		return (len(buffer) > 0)
+
+
+
+
+
+
 	def handle_write(self):
-		#self.handle_read()
-		cords = "12"
-		print "Server: Hello Channel"
-		cords = c.getCords()
-		cords = "Cords"
-		self.send(cords)
-		#self.send(c.getCords())
-		time.sleep(.1)
-		#c.setCords()
-		self.close()
+		try:
+			#self.handle_read()
+			cords = "12"
+			#print "Server: Writing"
+			cords = c.getCords()
+			cords = cords + "^" # append terminating character
+			#cords = "Cords"
+			self.send(cords)
+			#self.send(c.getCords())
+			#time.sleep(.1)
+			#c.setCords()
+			#self.close()
+		except Exception:
+			pass
 
 
 class Server(asyncore.dispatcher):
@@ -93,12 +127,12 @@ class Server(asyncore.dispatcher):
 		print data
 
 	def readable(self):
-		print "Server: To read or not to read..."
+		#print "Server: To read or not to read..."
 		return 1
 
 
 	def handle_connect (self):
-		print "Server: Hello Client"
+		#print "Server: Hello Client"
 		self.send("Hello Client")
 
 

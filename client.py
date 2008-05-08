@@ -17,11 +17,12 @@
 
 import asyncore, time
 import socket
+from operator import *
 
 class Client(asyncore.dispatcher):
 
-	def __init__(self, host, port=8038):
-		self.buffer = "Hello Server"
+	def __init__(self, host, msg, port=8038):
+		self.buffer = msg
 		asyncore.dispatcher.__init__(self)
 		self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.connect((host, port))
@@ -30,7 +31,7 @@ class Client(asyncore.dispatcher):
 		return (len(self.buffer) > 0)
 
 	def handle_write(self):
-		self.buffer = "U hello world"
+		#self.buffer = "U hello world"
 		#print "Client: Checking for new dots"
 		sent = self.send (self.buffer)
 		self.buffer = self.buffer[sent:]
@@ -46,7 +47,7 @@ class Client(asyncore.dispatcher):
 	def handle_read(self):
 
 		# get from server
-		s = self.recv(4)
+		s = self.recv(8192)
 		print "Received: ",s
 
 		#self.handle_close() # we don't expect more data
@@ -57,8 +58,8 @@ class Client(asyncore.dispatcher):
 
 	def handle_read(self):
 		# get from server
-		s = self.recv(4)
-		print "Received: ",s
+		s = self.recv(8192)
+		print "Received2: ",s[0:indexOf(s,"^")]
 		time.sleep(.1)
 		self.handle_write()
 		self.handle_close() # we don't expect more data
@@ -66,5 +67,5 @@ class Client(asyncore.dispatcher):
 		
 # try it out
 #def Run():
-request = Client("localhost")
+request = Client("localhost","U")
 asyncore.loop(count = 30)
