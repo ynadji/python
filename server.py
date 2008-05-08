@@ -10,6 +10,7 @@ import thread
 import random
 from operator import *
 from array import *
+import sys
 
 
 msg = ''
@@ -110,7 +111,7 @@ class Channel(asyncore.dispatcher):
 		# Player is requesting any updates in their queuei
 		if msg[0] == "U":
 			print "Update Found"
-			c.setCords("Updated Cords")
+			#c.setCords("Updated Cords")
 			#print "Msg count:",ps.countMsg(color)
 			# We have updates for this player
 			if ps.countMsg(color) > 0:
