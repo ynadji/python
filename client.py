@@ -22,6 +22,7 @@ import random
 
 id = ''
 complete_msg = ''
+received = ''
 
 class Client(asyncore.dispatcher):
 
@@ -56,11 +57,16 @@ class Client(asyncore.dispatcher):
 		self.close() # connection failed, shutdown
 
 	def handle_close(self):
+		global received
 		self.close()
+		print "Returning:",received
+		#raise received
+		#return received
 
 	def handle_read(self):
 		global id
 		global complete_msg
+		global received
 		# get from server
 		s = self.recv(8192)
 		rid = s[0:indexOf(s,"$")]
@@ -76,27 +82,33 @@ class Client(asyncore.dispatcher):
 
 		print "Received2: ",s[len(rid)+1:indexOf(s,"^")] # We are only interested in the msg, not the repeating msg
 		self.handle_write()
+		received = s[len(rid)+1:indexOf(s,"^")]
 		self.handle_close() # we don't expect more data
+
+def Run():
+	request = Client("localhost","green:P") # Add a new player
+	asyncore.loop(count = 30)
+	return received
 
 		
 # try it out
 request = Client("localhost","green:P") # Add a new player
 asyncore.loop(count = 30)
-request = Client("localhost","blue:P") # Add a new player
-asyncore.loop(count = 30)
-request = Client("localhost","green:N!1@1") # host is sending us cords for new dots
-asyncore.loop(count = 30)
-request = Client("localhost","green:N!2@2") # host is sending us cords for new dots
-asyncore.loop(count = 30)
-request = Client("localhost","green:N!3@3") # host is sending us cords for new dots
-asyncore.loop(count = 30)
-request = Client("localhost","green:U") # player is requesting cords for new dots or captured dots
-asyncore.loop(count = 30)
-request = Client("localhost","green:U") # player is requesting cords for new dots or captured dots
-asyncore.loop(count = 30)
-request = Client("localhost","green:U") # player is requesting cords for new dots or captured dots
-asyncore.loop(count = 30)
-request = Client("localhost","green:U") # player is requesting cords for new dots or captured dots
-asyncore.loop(count = 30)
-request = Client("localhost","green:C!1@1") # player has tried to capture dot at x y cord
-asyncore.loop(count = 30)
+#request = Client("localhost","blue:P") # Add a new player
+#asyncore.loop(count = 30)
+#request = Client("localhost","green:N!1@1") # host is sending us cords for new dots
+#asyncore.loop(count = 30)
+#request = Client("localhost","green:N!2@2") # host is sending us cords for new dots
+#asyncore.loop(count = 30)
+#request = Client("localhost","green:N!3@3") # host is sending us cords for new dots
+#asyncore.loop(count = 30)
+#request = Client("localhost","green:U") # player is requesting cords for new dots or captured dots
+#asyncore.loop(count = 30)
+#request = Client("localhost","green:U") # player is requesting cords for new dots or captured dots
+#asyncore.loop(count = 30)
+#request = Client("localhost","green:U") # player is requesting cords for new dots or captured dots
+#asyncore.loop(count = 30)
+#request = Client("localhost","green:U") # player is requesting cords for new dots or captured dots
+#asyncore.loop(count = 30)
+#request = Client("localhost","green:C!1@1") # player has tried to capture dot at x y cord
+#asyncore.loop(count = 30)
