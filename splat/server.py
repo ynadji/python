@@ -146,6 +146,7 @@ class Channel(asyncore.dispatcher):
 			#print "Awaiting msgs:",ps.countMsg(color)
 
 		if msg[0] == "B":
+			print "Sending board accross the wire"
 			c.setCords(x_cord)
 			cords = c.getCords()
 			ps.addCapture(cords)
