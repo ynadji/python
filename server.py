@@ -11,7 +11,6 @@ import random
 
 
 msg = ''
-buffer = ''
 
 class Cords():
 
@@ -27,8 +26,6 @@ c = Cords()
 
 class Channel(asyncore.dispatcher):
 
-	buffer = ''
-
 	def checkMsg(self, msg):
 		try:
 			if msg[0] == "U":
@@ -40,47 +37,17 @@ class Channel(asyncore.dispatcher):
 				c.setCords("New Cords")
 		except Exception:
 			pass	
-		#self.close()
 
 	def handle_read(self):
 		global msg
 		msg = self.recv (8192)
-		print "Server Reading:", msg
 		self.checkMsg(msg)
-
-
-#	# New write func trying to use buffer
-#	def handle_write(self):
-#		#global buffer
-#		print "Server Writing"
-#		buffer = c.getCords()
-#		sent = send (buffer)
-#		buffer = buffer[sent:]
-#		self.close()
-#
-#	def writable (self):
-#		#global buffer
-#		print "writing"
-#		return (len(buffer) > 0)
-
-
-
-
-
 
 	def handle_write(self):
 		try:
-			#self.handle_read()
-			cords = "12"
-			#print "Server: Writing"
 			cords = c.getCords()
 			cords = cords + "^" # append terminating character
-			#cords = "Cords"
 			self.send(cords)
-			#self.send(c.getCords())
-			#time.sleep(.1)
-			#c.setCords()
-			#self.close()
 		except Exception:
 			pass
 
@@ -105,49 +72,21 @@ class Server(asyncore.dispatcher):
 
 	def handle_accept(self):
 		channel, addr = self.accept()
-		print "Channel: ",channel
-		#x = "Hello Client"
-		#self.send(x)
 		Channel(channel)
 
 	def handle_write(self):
-		print "Server Writing"
-		#cords = "12-4"
-		#self.cords = cords
 		sent = self.send (self.buffer)
 		self.buffer = self.buffer[sent:]
-		#self.close()
 
 	def writable (self):
 		return (len(self.buffer) > 0)
 
 	def handle_read(self):
-		print "Server Reading"
 		data = self.recv (8192)
-		print data
 
 	def readable(self):
-		#print "Server: To read or not to read..."
 		return 1
 
 
-	def handle_connect (self):
-		#print "Server: Hello Client"
-		self.send("Hello Client")
-
-
-#def Run():
 server = Server(8038)
 asyncore.loop()
-#thread.start_new_thread(asyncore.loop(),count = 40)
-
-#def Run():
-	#while (1):
-		#thread.start_new_thread(asyncore.poll,())
-		#thread.start_new_thread(asyncore.loop,())
-		#asyncore.poll(timeout=.01)
-		#time.sleep(2)
-
-
-#thread.start_new_thread(Run(),'')
-#print "Hello World"
