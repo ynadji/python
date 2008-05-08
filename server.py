@@ -146,8 +146,8 @@ class Channel(asyncore.dispatcher):
 			#print "Awaiting msgs:",ps.countMsg(color)
 
 		if msg[0] == "B":
-			c.setCords()
-			cords = c.getCords(x_cord)
+			c.setCords(x_cords)
+			cords = c.getCords()
 			ps.addCapture(cords)
 
 		if msg[0] == "Q":
