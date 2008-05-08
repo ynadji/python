@@ -31,41 +31,26 @@ class Client(asyncore.dispatcher):
 		return (len(self.buffer) > 0)
 
 	def handle_write(self):
-		#self.buffer = "U hello world"
-		#print "Client: Checking for new dots"
 		sent = self.send (self.buffer)
 		self.buffer = self.buffer[sent:]
-		#self.close()
 
 	def handle_connect(self):
-		print "Client: Connected"
 		pass # connection succeeded
 
 	def handle_expt(self):
 		self.close() # connection failed, shutdown
 
-	def handle_read(self):
-
-		# get from server
-		s = self.recv(8192)
-		print "Received: ",s
-
-		#self.handle_close() # we don't expect more data
-
 	def handle_close(self):
-		print "Closing"
 		self.close()
 
 	def handle_read(self):
 		# get from server
 		s = self.recv(8192)
-		print "Received2: ",s[0:indexOf(s,"^")]
-		time.sleep(.1)
+		print "Received2: ",s[0:indexOf(s,"^")] # We are only interested in the msg, not the repeating msg
 		self.handle_write()
 		self.handle_close() # we don't expect more data
 
 		
 # try it out
-#def Run():
 request = Client("localhost","U")
 asyncore.loop(count = 30)
