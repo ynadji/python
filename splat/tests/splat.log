@@ -1,0 +1,14 @@
+Test #0: (Host) -- 05-08 01:00 root       INFO     Test Host.name setter/getter. Passed? True
+Test #1: (Host) -- 05-08 01:00 root       INFO     Test Host.name setter/getter. Passed? True
+Test #0: (Player) -- 05-08 01:00 root       INFO     Test Player.name setter/getter. Passed? True
+Test #1: (Player) -- 05-08 01:00 root       INFO     Test Player.name setter/getter. Passed? True
+Test #0: (Host) -- 05-08 01:00 root       INFO     Test Host.name setter/getter. Passed? True
+Test #1: (Host) -- 05-08 01:00 root       INFO     Test Host.name setter/getter. Passed? True
+Test #0: (Player) -- 05-08 01:01 root       INFO     Test Player.name setter/getter. Passed? True
+Test #1: (Player) -- 05-08 01:01 root       INFO     Test Player.name setter/getter. Passed? True
+Test #0: (Host) -- 05-08 01:01 root       INFO     Test Host.name setter/getter. Passed? True
+Test #1: (Host) -- 05-08 01:01 root       INFO     Test Host.name setter/getter. Passed? True
+Test #0: (Player) -- 05-08 01:02 root       INFO     Test Player.name setter/getter. Passed? True
+Test #1: (Player) -- 05-08 01:02 root       INFO     Test Player.name setter/getter. Passed? True
+Test #0: (Host) -- 05-08 01:02 root       INFO     Test Host.name setter/getter. Passed? True
+Test #1: (Host) -- 05-08 01:02 root       INFO     Test Host.name setter/getter. Passed? True
