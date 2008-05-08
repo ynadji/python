@@ -85,15 +85,15 @@ class Client(asyncore.dispatcher):
 		received = s[len(rid)+1:indexOf(s,"^")]
 		self.handle_close() # we don't expect more data
 
-def Run():
-	request = Client("localhost","green:P") # Add a new player
+def Run(msg):
+	request = Client("localhost",msg) # Add a new player
 	asyncore.loop(count = 30)
 	return received
 
 		
 # try it out
-request = Client("localhost","green:P") # Add a new player
-asyncore.loop(count = 30)
+#request = Client("localhost","green:P") # Add a new player
+#asyncore.loop(count = 30)
 #request = Client("localhost","blue:P") # Add a new player
 #asyncore.loop(count = 30)
 #request = Client("localhost","green:N!1@1") # host is sending us cords for new dots

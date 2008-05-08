@@ -18,10 +18,10 @@ class General(unittest.TestCase):
 class Player(unittest.TestCase):
 
 	def testClientCreate(self):
-		Client("localhost","green:P")
+		assert Run("green:P") == "You have been added"
 
 	def testClientCreate2(self):
-		assert Client("localhost","blue:P") == "You have been added"
+		assert Run("blue:P") == "You have been added"
 
 if __name__ == "__main__":
 	unittest.main() # Run all tests
