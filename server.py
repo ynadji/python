@@ -47,6 +47,7 @@ class PlayersStruct():
 		print self.bigboy
 
 	def countMsg(self,color):
+		print self.bigboy
 		return len(self.bigboy[color])
 
 	def getMsg(self,color):
@@ -81,13 +82,13 @@ class Channel(asyncore.dispatcher):
 		try:
 			x_cord = msg[indexOf(msg,"!")+1:indexOf(msg,"@")]
 			y_cord = msg[indexOf(msg,"@")+1:]
-			print "X:",x_cord
-			print "Y:",y_cord
+			#print "X:",x_cord
+			#print "Y:",y_cord
 		except Exception:
 			pass
 		msg = msg[indexOf(msg,":")+1]
 		# debug prints
-		print "ID:",id
+		#print "ID:",id
 		print "Color:",color
 		print "Msg:",msg
 
@@ -101,7 +102,7 @@ class Channel(asyncore.dispatcher):
 		if msg[0] == "U":
 			print "Update Found"
 			c.setCords("Updated Cords")
-			print "Msg count:",ps.countMsg(color)
+			#print "Msg count:",ps.countMsg(color)
 			# We have updates for this player
 			if ps.countMsg(color) > 0:
 				this_msg = ps.getMsg(color)
@@ -118,9 +119,22 @@ class Channel(asyncore.dispatcher):
 			c.setCords(x_cord+","+y_cord)
 			cords = c.getCords()
 			ps.addMsgAll(cords)
-			print "Awaiting msgs:",ps.countMsg(color)
+			#print "Awaiting msgs:",ps.countMsg(color)
 
-		#except Exception:
+		if msg[0] == "Q":
+			print "Game Over"
+			c.setCords("Game Over")
+			cords = c.getCords()
+			ps.addMsgAll(cords)
+
+		if msg[0] == "C":
+			print "Capture attempt"
+			c.setCords(x_cord+","+y_cord,color)
+			# Maybe I should write a function that will add all the people trying to capture x y into a queue and when an update board is called we look at the first person in that list and they get the dot.
+			# Can be done by using a dict ith x,y keys and whoever is the first value wins it.  Although thats pretty much outside the scope of networking...
+			# but where and what hsould I be returning?
+		
+				#except Exception:
 			#pass	
 
 	def handle_read(self):
