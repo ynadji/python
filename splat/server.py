@@ -155,7 +155,8 @@ class Channel(asyncore.dispatcher):
 			c.setCords("[("+x_cord+","+y_cord+"),'"+color+"','Capture']")
 			cords = c.getCords()
 			#ps.addMsg(host_color,cords)
-			ps.addCapture(host_color,cords)
+			#ps.addCapture(host_color,cords)
+			ps.addCapture(cords)
 
 			# Maybe I should write a function that will add all the people trying to capture x y into a queue and when an update board is called we look at the first person in that list and they get the dot.
 			# Can be done by using a dict ith x,y keys and whoever is the first value wins it.  Although thats pretty much outside the scope of networking...
