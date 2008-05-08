@@ -530,6 +530,10 @@ def main():
     if isinstance(PLAYER, Host):
         run_str = PLAYER.color + ":B:!" + str(PLAYER.config) + "@"
         Run(run_str)
+    else:
+        PLAYER.addClient()
+        while PLAYER.board == None:
+            PLAYER.updateBoard()
                         
 
 ### END OF MENU SHIT #####################################
