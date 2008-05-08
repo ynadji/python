@@ -30,10 +30,11 @@ class Client(asyncore.dispatcher):
 		return (len(self.buffer) > 0)
 
 	def handle_write(self):
-		self.buffer = "New Dots? - Client"
+		self.buffer = "U hello world"
 		#print "Client: Checking for new dots"
 		sent = self.send (self.buffer)
 		self.buffer = self.buffer[sent:]
+		#self.close()
 
 	def handle_connect(self):
 		print "Client: Connected"
@@ -51,11 +52,8 @@ class Client(asyncore.dispatcher):
 		#self.handle_close() # we don't expect more data
 
 	def handle_close(self):
+		print "Closing"
 		self.close()
-
-	def adjust_time(self, delta):
-		# override this method!
-		print "k", delta
 
 	def handle_read(self):
 		# get from server
@@ -63,12 +61,10 @@ class Client(asyncore.dispatcher):
 		print "Received: ",s
 		time.sleep(.1)
 		self.handle_write()
+		self.handle_close() # we don't expect more data
 
 		
-
-
-
 # try it out
 #def Run():
 request = Client("localhost")
-asyncore.loop(count = 2)
+asyncore.loop(count = 30)

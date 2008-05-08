@@ -10,6 +10,8 @@ import thread
 import random
 
 
+msg = ''
+
 class Cords():
 
 	cords = "', 4"
@@ -25,22 +27,28 @@ c = Cords()
 
 class Channel(asyncore.dispatcher):
 
+	def checkMsg(self, msg):
+		if msg[0] == "U":
+			print "Update Found"
+
+	def handle_read(self):
+		global msg
+		msg = self.recv (8192)
+		print "Server Reading:", msg
+		print msg
+		self.checkMsg(msg)
 
 	def handle_write(self):
+		#self.handle_read()
 		cords = "12"
 		print "Server: Hello Channel"
 		cords = c.getCords()
+		cords = "Cords"
 		self.send(cords)
 		#self.send(c.getCords())
 		time.sleep(.1)
 		#c.setCords()
 		self.close()
-
-	def handle_read(self):
-		print "Server Reading"
-		self.data = self.recv (8192)
-		print self.data
-
 
 
 class Server(asyncore.dispatcher):
@@ -96,6 +104,16 @@ class Server(asyncore.dispatcher):
 
 #def Run():
 server = Server(8038)
-asyncore.loop(count=40)
+asyncore.loop()
+#thread.start_new_thread(asyncore.loop(),count = 40)
+
+#def Run():
+	#while (1):
+		#thread.start_new_thread(asyncore.poll,())
+		#thread.start_new_thread(asyncore.loop,())
+		#asyncore.poll(timeout=.01)
+		#time.sleep(2)
+
 
 #thread.start_new_thread(Run(),'')
+#print "Hello World"
