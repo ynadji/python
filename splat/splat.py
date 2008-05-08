@@ -458,7 +458,7 @@ def main():
                         #fix ^
                  # uncomment once networking is integrated
                  # can advance once know BOARD_SIZE
-                 #       state = 12345 # (no more menus, draw game)
+                        state = 12345 # (no more menus, draw game)
                         background.fill(green)
                         screen.blit(background, (0,0))
                         pygame.display.flip()
@@ -527,18 +527,30 @@ def main():
         return board
 
 
+    if isinstance(PLAYER, Host):
+        run_str = PLAYER.color + ":B:!" + str(PLAYER.config) + "@"
+        Run(run_str)
                         
 
 ### END OF MENU SHIT #####################################
 
+    PLAYER.updateBoard()
+    time.sleep(4)
+    PLAYER.updateBoard()
+
+    if isinstance(PLAYER, Host):
+        PLAYER.beginDotTimer()
+    """
     print "awesome1"
     if isinstance(PLAYER, Host):
         print "awesome2"
         PLAYER.beginDotTimer()
         print "awesome3"
         PLAYER.setBoard(genBoard(PLAYER.config))
+    else:
 
     print "awesome4"
+    """
    
 # board draw
 

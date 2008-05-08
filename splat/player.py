@@ -54,12 +54,20 @@ class Player:
 			return
 		elif msg == "Got Host? We do.":
 			return
+		"""
+		elif msg.startswith("{'maxDots'"):
+			self.config = eval(msg)
+			self.genBoard(self.config)
+		"""
 
 		print "Parsing message:",msg
 		infoz = eval(msg)
 
 		# new dot is placed
-		if infoz[2] == "New" and infoz[1] == None:
+		if type(infoz).__name__ == 'dict':
+			self.config = infoz
+			self.genBoard(self.config)
+		elif infoz[2] == "New" and infoz[1] == None:
 			print "Placing NEW dot"
 			x, y = infoz[0]
 			self.board.place_dot(x, y, infoz[1])
