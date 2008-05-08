@@ -56,7 +56,7 @@ class PlayersStruct():
 
 	def addCapture(self,cords):
 		for key in self.bigboy.keys():
-			self.bigboy[color].insert(p,cords)
+			self.bigboy[color].insert(0,cords)
 
 
 	
@@ -133,11 +133,15 @@ class Channel(asyncore.dispatcher):
 			print "New Dot Cords Received"
 			if color == "None":
 				c.setCords("[("+x_cord+","+y_cord+"),"+color+",'New']")
+				cords = c.getCords()
+				ps.addMsgAll(cords)
 			else:
 				c.setCords("[("+x_cord+","+y_cord+"),'"+color+"','New']")
+				cords = c.getCords()
+				ps.addCapture(cords)
 
-			cords = c.getCords()
-			ps.addMsgAll(cords)
+			#cords = c.getCords()
+			#ps.addMsgAll(cords)
 			#print "Awaiting msgs:",ps.countMsg(color)
 
 		if msg[0] == "Q":
