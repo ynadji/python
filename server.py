@@ -54,6 +54,11 @@ class PlayersStruct():
 	def getMsg(self,color):
 		return self.bigboy[color].pop(0)
 
+	def addCapture(self,cords):
+		for key in self.bigboy.keys():
+			self.bigboy[color].insert(p,cords)
+
+
 	
 ps = PlayersStruct()
 
@@ -145,7 +150,8 @@ class Channel(asyncore.dispatcher):
 			print "Capture attempt"
 			c.setCords("[("+x_cord+","+y_cord+"),'"+color+"','Capture']")
 			cords = c.getCords()
-			ps.addMsg(host_color,cords)
+			#ps.addMsg(host_color,cords)
+			ps.addCapture(host_color,cords)
 
 			# Maybe I should write a function that will add all the people trying to capture x y into a queue and when an update board is called we look at the first person in that list and they get the dot.
 			# Can be done by using a dict ith x,y keys and whoever is the first value wins it.  Although thats pretty much outside the scope of networking...
