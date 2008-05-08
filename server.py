@@ -128,6 +128,7 @@ class Channel(asyncore.dispatcher):
 			print "New Dot Cords Received"
 			#c.setCords("[("+x_cord+","+y_cord+"),'"+color+"','New']")
 			c.setCords("[("+x_cord+","+y_cord+"),"+color+"]")
+			print "FUCK ME"
 			cords = c.getCords()
 			ps.addMsgAll(cords)
 			#print "Awaiting msgs:",ps.countMsg(color)
@@ -141,6 +142,7 @@ class Channel(asyncore.dispatcher):
 		if msg[0] == "C":
 			print "Capture attempt"
 			#c.setCords("[("+x_cord+","+y_cord+"),'"+color+"','Capture']")
+			print "LILLY"
 			c.setCords("[("+x_cord+","+y_cord+"),"+color+"]")
 			cords = c.getCords()
 			ps.addMsg(host_color,cords)
