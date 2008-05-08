@@ -60,8 +60,6 @@ class Client(asyncore.dispatcher):
 		global received
 		self.close()
 		print "Returning:",received
-		#raise received
-		#return received
 
 	def handle_read(self):
 		global id
@@ -82,7 +80,7 @@ class Client(asyncore.dispatcher):
 
 		print "Received2: ",s[len(rid)+1:indexOf(s,"^")] # We are only interested in the msg, not the repeating msg
 		self.handle_write()
-		received = s[len(rid)+1:indexOf(s,"^")]
+		received = s[len(rid)+1:indexOf(s,"^")] # We are only interested in the msg, not the repeating msg
 		self.handle_close() # we don't expect more data
 
 def Run(msg):

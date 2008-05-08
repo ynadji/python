@@ -74,8 +74,10 @@ class Channel(asyncore.dispatcher):
 		global id
 		#try:
 		global ps
+		# parse the received msg
 		id = msg[0:indexOf(msg,"$")]
 		color =  msg[len(id)+1:indexOf(msg,":")]
+		# we wont always be receiving cords in our msg, so check if we have them or not
 		try:
 			x_cord = msg[indexOf(msg,"!")+1:indexOf(msg,"@")]
 			y_cord = msg[indexOf(msg,"@")+1:]
@@ -84,27 +86,33 @@ class Channel(asyncore.dispatcher):
 		except Exception:
 			pass
 		msg = msg[indexOf(msg,":")+1]
+		# debug prints
 		print "ID:",id
 		print "Color:",color
 		print "Msg:",msg
 
+		# create a new player
 		if msg[0] == "P":
 			print "New player"
 			ps.newColor(color)
 			c.setCords("You have been added")
 
+		# Player is requesting any updates in their queuei
 		if msg[0] == "U":
 			print "Update Found"
 			c.setCords("Updated Cords")
 			print "Msg count:",ps.countMsg(color)
+			# We have updates for this player
 			if ps.countMsg(color) > 0:
 				this_msg = ps.getMsg(color)
 				print "Returning this msg:",this_msg
 				c.setCords(this_msg)
+			# We have no updates for this player
 			else:
 				c.setCords("Nothing New")
 				print "No Messages awaiting"
 
+		# Host player has told us that a new dot exists so we'll add it to the queue for all players
 		if msg[0] == "N":
 			print "New Dot Cords Received"
 			c.setCords(x_cord+","+y_cord)
