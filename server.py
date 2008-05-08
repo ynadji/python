@@ -16,7 +16,7 @@ msg = ''
 
 class Cords():
 
-	cords = "', 4"
+	cords = "0:0"
 
 	def setCords(self, cords):
 		self.cords = cords		
@@ -100,7 +100,7 @@ class Channel(asyncore.dispatcher):
 
 		if msg[0] == "N":
 			print "New Found"
-			c.setCords("%d:%d" % x_cord % y_cord)
+			c.setCords(x_cord+","+y_cord)
 			cords = c.getCords()
 			ps.addMsg(color,cords)
 			print "Awaiting msgs:",ps.countMsg(color)
