@@ -85,6 +85,7 @@ class Client(asyncore.dispatcher):
 
 def Run(msg):
 	request = Client("localhost",msg) # Add a new player
+	#request = Client("198.37.18.197",msg) # Add a new player
 	asyncore.loop(count = 30)
 	return received
 

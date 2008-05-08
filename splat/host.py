@@ -13,7 +13,7 @@
 
 import sys
 from threading import Timer
-from player import Player
+from player import *
 from client import *
 
 COLORS = ["blue", "red", "green", "orange", "purple", "yellow"]
@@ -36,8 +36,6 @@ class Host(Player):
 		self.availableColors = COLORS
 		self.removeColor(color)
 		self.clients = [self]
-		self.board
-		Run("%s:P" % self.color)
 
 		# setup config
 		if config == None:
@@ -45,6 +43,9 @@ class Host(Player):
 		else:
 			self.config = config
 		# add host
+		run_str = "%s:P" % self.color
+		print "Host Adding:",run_str
+		Run(run_str)
 
 		self.config['maxPlayers'] += 1
 		# this should be removed
@@ -70,30 +71,38 @@ class Host(Player):
 			self.dotTimer = Timer(DOT_INTERVAL, self.placeNewDots)
 			self.dotTimer.start()
 		"""
+		dots_added = []
+		#while not self.board.at_max_dots() and len(dots_added) < self.config['maxPlayers'] + 1:
+		#	# add dot, track it to send to clients
+		#	print "Do i get here?"
+		#	dots_added.append(self.board.add_dot)
+		for i in xrange(self.config['maxPlayers'] + 1):
+			self.board.add_dot()
+
+
 		# form request and send it out
-		"""
-		self.updateClientBoards(request)
-		"""
-		self.uselessCountVariable -= 1
+		#for update in dots_added:
+		#	#run_str = "%s:N!%s@%s" % (self.color, str(update[1]), str(update[2]))
+		#	#run_str = "%s:N!%2@%2" % (self.color, str(update[1]), str(update[2]))
+		#	print "self.color:", self.color
+		#	print "update[1]:", str(update[1])
+		#	print "update[2]:", update[2]
+		#	run_str = "blue:N!" + str(update[1]) + "@" + str(update[2])
+		#	print "Run String: ", run_str
+		#	Run(run_str)
+
+		#self.uselessCountVariable -= 1
 		sys.stderr.write("placeNewDots() has been run\n")
 
-		# this is temporary until i have a working Board
-		# class. Board should return the number of dots added
-		# or something similar, and the Timer threads
-		# will no longer be made after all possible
-		# dots have been added
-		if self.uselessCountVariable > 0:
+		if not self.board.at_max_dots():
 			self.dotTimer = Timer(DOT_INTERVAL, self.placeNewDots)
 			self.dotTimer.start()
 
-	# useless, atm
-	def updateClientBoards(self, request):
+	def updateClientBoards(self):
 		"""This should be used when something is captured,
 		and when new dots are added"""
-		# create list of a (color,x,y) tuples for capture
-		captures = request
-		for client in clients:
-			client.updateBoard(captures)
+		for client in self.clients:
+			client.updateBoard()
 
 	def addClient(self, player):
 		if len(self.clients) == self.config['maxPlayers']:
@@ -116,6 +125,8 @@ class Host(Player):
 		self.removeColor(player.color)
 		# add client to server
 		Run("%s:p" % player.color)
+		# generate clientBoard
+		#player.setBoard(self.board)
 
 	def numClients(self):
 		return len(self.clients)

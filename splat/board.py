@@ -1,5 +1,6 @@
 import os
 import random
+from client import *
 
 class Board:
      num_dots = 0
@@ -57,7 +58,19 @@ class Board:
 
                self.grid.append([None, x, y])
                self.num_dots += 1
+
+               # YOU JUST CHANGED THIS, REMEMBER IF SHIT FUCKS UP
+               run_str = "None:N!" + str(x) + "@" + str(y)
+               print "RUN STR: ",run_str
+               Run(run_str)
                
+     def place_dot(self, x, y, player):
+          global grid
+
+          loc = [x,y]
+          if not self.is_dot_at(loc):
+               self.grid.append([player, x, y])
+
      #Initializes the grid to start with the numebr of players + 1 dots.
      def init_grid(self):
           global num_dots
@@ -186,6 +199,10 @@ class Board:
                     return True
           return False
 
-     
-                    
-     
+     def __str__(self):
+          global grid
+          ret = ""
+          for i in range(len(self.grid)):
+               ret += str(self.grid[i])
+
+          return ret
