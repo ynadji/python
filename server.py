@@ -58,6 +58,7 @@ ps = PlayersStruct()
 
 buffer = ''
 id = ''
+host_color = ''
 
 class Channel(asyncore.dispatcher):
 
@@ -75,6 +76,7 @@ class Channel(asyncore.dispatcher):
 		global id
 		#try:
 		global ps
+		global host_color
 		# parse the received msg
 		id = msg[0:indexOf(msg,"$")]
 		color =  msg[len(id)+1:indexOf(msg,":")]
@@ -93,10 +95,17 @@ class Channel(asyncore.dispatcher):
 		print "Msg:",msg
 
 		# create a new player
-		if msg[0] == "P":
+		if msg[0] == "p":
 			print "New player"
 			ps.newColor(color)
 			c.setCords("You have been added")
+
+		# create the host
+		if msg[0] == "P":
+			print "New Host"
+			ps.newColor(color)
+			c.setCords("You have been added")
+			host_color = color
 
 		# Player is requesting any updates in their queuei
 		if msg[0] == "U":
@@ -129,7 +138,10 @@ class Channel(asyncore.dispatcher):
 
 		if msg[0] == "C":
 			print "Capture attempt"
-			c.setCords(x_cord+","+y_cord,color)
+			c.setCords(x_cord+","+y_cord+":"+color)
+			cords = c.getCords()
+			ps.addMsg(host_color,cords)
+
 			# Maybe I should write a function that will add all the people trying to capture x y into a queue and when an update board is called we look at the first person in that list and they get the dot.
 			# Can be done by using a dict ith x,y keys and whoever is the first value wins it.  Although thats pretty much outside the scope of networking...
 			# but where and what hsould I be returning?
