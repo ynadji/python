@@ -104,7 +104,7 @@ class Channel(asyncore.dispatcher):
 		if msg[0] == "P":
 			print "New Host"
 			ps.newColor(color)
-			c.setCords("You have been added")
+			c.setCords("Got Host?")
 			host_color = color
 
 		# Player is requesting any updates in their queuei
