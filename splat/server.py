@@ -147,7 +147,7 @@ class Channel(asyncore.dispatcher):
 
 		if msg[0] == "B":
 			c.setCords()
-			cords = c.getCords(msg)
+			cords = c.getCords(x_cord)
 			ps.addCapture(cords)
 
 		if msg[0] == "Q":
