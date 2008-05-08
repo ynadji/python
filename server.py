@@ -138,7 +138,7 @@ class Channel(asyncore.dispatcher):
 
 		if msg[0] == "C":
 			print "Capture attempt"
-			c.setCords(x_cord+","+y_cord+":"+color)
+			c.setCords("[("+x_cord+","+y_cord+"),"+color)
 			cords = c.getCords()
 			ps.addMsg(host_color,cords)
 
