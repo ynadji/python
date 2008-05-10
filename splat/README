@@ -1,0 +1,3 @@
+- The game is run with the makefile.
+	- "make run" runs the game/high scores database
+	- "make tests" runs the tests
